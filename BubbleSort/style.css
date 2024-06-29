@@ -1,0 +1,29 @@
+.start-btn{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-block: 10px;
+    font-size: 2rem;
+    border: 2px solid black;
+    padding-inline: 28px;
+    border-radius: 11px;
+    text-align: center;
+    cursor: pointer;
+
+}
+.parentDiv{
+    border: 2px solid black;
+    background-color: aliceblue;
+    display: flex;
+    gap: 10px;
+    height: 70vh;
+    justify-content: center;
+    align-items: flex-end;
+
+}
+.eleBar{
+    border: 2px solid black;
+    width: 50px;
+    text-align: center;
+    background-color: blueviolet;
+}
