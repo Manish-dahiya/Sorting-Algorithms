@@ -1,21 +1,33 @@
 
 
 const arr=[100,90,80,70,60,50,40,30,20,5];
+const duparr=[...arr];//it will act like a deep copy although it is not.
 let parentDiv=document.querySelector(".parentDiv");
 let startBtn=document.querySelector(".start-btn");
+let resetBtn=document.querySelector(".reset-btn");
 let algorithmSelect=document.querySelector("#algorithm-select")
 let inputbox=document.querySelector("#input-arr")
 
 
-
-for(let i=0;i<arr.length;i++){
-    let eleBar=document.createElement("div");
-    eleBar.style.height=arr[i]*6+"px";
-    eleBar.innerHTML=arr[i];
-    eleBar.setAttribute("id","eleBar"+i);
-    eleBar.classList.add("eleBar");
-    parentDiv.appendChild(eleBar);
+function initialPositioning(array){
+    for(let i=0;i<array.length;i++){
+        let eleBar=document.createElement("div");
+        eleBar.style.height=array[i]*6+"px";
+        eleBar.innerHTML=array[i];
+        eleBar.setAttribute("id","eleBar"+i);
+        eleBar.classList.add("eleBar");
+        parentDiv.appendChild(eleBar);
+    }
+    
 }
+initialPositioning(arr);
+
+resetBtn.addEventListener("click",() => {
+
+    debugger
+     parentDiv.innerHTML = "";
+    initialPositioning(duparr);
+})
 
 startBtn.addEventListener("click",async() => {
     
@@ -37,7 +49,10 @@ startBtn.addEventListener("click",async() => {
         await bubbleSort(arr);
     } else if (selectedAlgorithm === "selectionSort") {
         await selectionSort(arr);
-    } else if (selectedAlgorithm === "mergeSort") {
+    }else if(selectedAlgorithm=="insertionSort"){
+        await insertionSort(arr);
+    }
+     else if (selectedAlgorithm === "mergeSort") {
         await mergeSort(arr,0,arr.length-1);
     }
 
@@ -49,7 +64,6 @@ const sleep=(time)=>{
 
 
 async function bubbleSort(arr){
-    
     for(let i=arr.length;i>0;i--){
         // let didswap=0;
         for(let j=0;j<i-1;j++){
@@ -68,7 +82,7 @@ async function selectionSort(arr){
     for (let i = 0; i < arr.length; i++){
         let miniat = i;
         for (let j = i; j < arr.length; j++){
-            await sleep(500);
+            await sleep(400);
           if(arr[miniat]>arr[j]){
             miniat=j;
           }
@@ -76,7 +90,21 @@ async function selectionSort(arr){
         swapNumber(arr,i,miniat);
         swapBars(i,miniat)
       }
-        
+}
+
+async function insertionSort(arr){
+    for(let i=1;i<arr.length;i++){
+        let j=i;
+        while(j>0 && arr[j-1]>arr[j]){
+            let temp=arr[j];
+            arr[j]=arr[j-1];
+            arr[j-1]=temp;
+            swapBars(j,j-1);
+            j--;
+           await sleep(500);
+           
+        }
+    }
 }
 
 async function mergeSort(arr, low, high) {
