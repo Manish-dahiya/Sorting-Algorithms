@@ -16,8 +16,8 @@
     background-color: aliceblue;
     display: flex;
     gap: 10px;
-    height: 70vh;
-    justify-content: center;
+    height: 85vh;
+        justify-content: center;
     align-items: flex-end;
 
 }
@@ -26,4 +26,23 @@
     width: 50px;
     text-align: center;
     background-color: blueviolet;
+}
+#algorithm-select{
+    height: 35px;
+    width: 115px;
+    background: blueviolet;
+    color: white;
+
+}
+.left{
+    display: flex;
+    gap: 10px;
+}
+.input p{
+    margin: 0;
+}
+
+.input input{
+    height: 35px;
+    width: 400px;
 }
