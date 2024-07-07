@@ -1,108 +1,122 @@
 
 
-const arr=[100,90,80,70,60,50,40,30,20,5];
-const duparr=[...arr];//it will act like a deep copy although it is not.
-let parentDiv=document.querySelector(".parentDiv");
-let startBtn=document.querySelector(".start-btn");
-let resetBtn=document.querySelector(".reset-btn");
-let algorithmSelect=document.querySelector("#algorithm-select")
-let inputbox=document.querySelector("#input-arr")
+// Default array
+const defaultArr = [100, 90, 80, 70, 60, 50, 40, 30, 20, 5];
+let currentArr = [...defaultArr]; 
 
+let parentDiv = document.querySelector(".parentDiv");
+let startBtn = document.querySelector(".start-btn");
+let resetBtn = document.querySelector(".reset-btn");
+let algorithmSelect = document.querySelector("#algorithm-select");
+let inputbox = document.querySelector("#input-arr");
 
-function initialPositioning(array){
-    for(let i=0;i<array.length;i++){
-        let eleBar=document.createElement("div");
-        eleBar.style.height=array[i]*6+"px";
-        eleBar.innerHTML=array[i];
-        eleBar.setAttribute("id","eleBar"+i);
+// Function to initialize positioning of bars
+function initialPositioning(array) {
+    parentDiv.innerHTML = ""; // Clear previous bars
+    for (let i = 0; i < array.length; i++) {
+        let eleBar = document.createElement("div");
+        eleBar.style.height = array[i] * 6 + "px";
+        eleBar.innerHTML = array[i];
+        eleBar.setAttribute("id", "eleBar" + i);
         eleBar.classList.add("eleBar");
         parentDiv.appendChild(eleBar);
     }
-    
 }
-initialPositioning(arr);
 
-resetBtn.addEventListener("click",() => {
+// Initialize with the default array on page load
+initialPositioning(defaultArr);
 
-    debugger
-     parentDiv.innerHTML = "";
-    initialPositioning(duparr);
-})
-
-startBtn.addEventListener("click",async() => {
-    
-     
-    let inputarr=inputbox.value.trim().split(" ");
-    console.log(inputarr);
-    let ARR=inputarr.map((ele)=>{
+// Reset button event listener
+resetBtn.addEventListener("click", () => {
+    let inputArr=inputbox.value.trim().split(" ").map((ele)=>{
         return parseInt(ele);
-    })
-    console.log(ARR);
+    });
+    // Use default or user input array
+    if (inputArr.length > 1) {
+        currentArr = [...inputArr];
+    } else {
+        currentArr = [...defaultArr];
+    }
+
+    // Reinitialize the visualization
+    initialPositioning(currentArr);
+});
+
+// Start button event listener
+startBtn.addEventListener("click", async () => {
+   
+    let inputArr=inputbox.value.trim().split(" ").map((ele)=>{
+                return parseInt(ele);
+            });
+    console.log(inputArr);
     
 
+    // Use default or user input array
+    if (inputArr.length > 1) {
+        currentArr = [...inputArr];
+    } else if(inputArr) {
+        console.log(inputArr);
+        
+        currentArr = [...defaultArr];
+    }
 
+    // Reinitialize the visualization with the chosen array
+    initialPositioning(currentArr);
 
-
-    //for the type of algo
+    // Sort the chosen array using the selected algorithm
     let selectedAlgorithm = algorithmSelect.value;
     if (selectedAlgorithm === "bubbleSort") {
-        await bubbleSort(arr);
+        await bubbleSort(currentArr);
     } else if (selectedAlgorithm === "selectionSort") {
-        await selectionSort(arr);
-    }else if(selectedAlgorithm=="insertionSort"){
-        await insertionSort(arr);
+        await selectionSort(currentArr);
+    } else if (selectedAlgorithm === "insertionSort") {
+        await insertionSort(currentArr);
+    } else if (selectedAlgorithm === "mergeSort") {
+        await mergeSort(currentArr, 0, currentArr.length - 1);
     }
-     else if (selectedAlgorithm === "mergeSort") {
-        await mergeSort(arr,0,arr.length-1);
-    }
-
 });
-//so that it does change immediately;
-const sleep=(time)=>{
-    return new Promise(resolve=>setTimeout(resolve,time));
+
+// Function to create a delay
+const sleep = (time) => {
+    return new Promise(resolve => setTimeout(resolve, time));
 }
 
+// Sorting algorithm functions
 
-async function bubbleSort(arr){
-    for(let i=arr.length;i>0;i--){
-        // let didswap=0;
-        for(let j=0;j<i-1;j++){
-            if(arr[j]>arr[j+1]){
-                await sleep(500);//to add the delay 
-                swapNumber(arr,j,j+1);
-                swapBars(j,j+1);
+async function bubbleSort(arr) {
+    for (let i = arr.length; i > 0; i--) {
+        for (let j = 0; j < i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                await sleep(500); // Add delay
+                swapNumber(arr, j, j + 1);
+                swapBars(j, j + 1); // Update bars based on the new indices
             }
-            
         }
-        // if(didswap==0) break;
     }
 }
 
-async function selectionSort(arr){
-    for (let i = 0; i < arr.length; i++){
+async function selectionSort(arr) {
+    for (let i = 0; i < arr.length; i++) {
         let miniat = i;
-        for (let j = i; j < arr.length; j++){
+        for (let j = i; j < arr.length; j++) {
             await sleep(400);
-          if(arr[miniat]>arr[j]){
-            miniat=j;
-          }
+            if (arr[miniat] > arr[j]) {
+                miniat = j;
+            }
         }
-        swapNumber(arr,i,miniat);
-        swapBars(i,miniat)
-      }
+        swapNumber(arr, i, miniat);
+        swapBars(i, miniat); // Update bars based on the new indices
+    }
 }
 
-async function insertionSort(arr){
-    for(let i=1;i<arr.length;i++){
-        let j=i;
-        while(j>0 && arr[j-1]>arr[j]){
-            let temp=arr[j];
-            arr[j]=arr[j-1];
-            arr[j-1]=temp;
-            swapBars(j,j-1);
+async function insertionSort(arr) {
+    for (let i = 1; i < arr.length; i++) {
+        let j = i;
+        while (j > 0 && arr[j - 1] > arr[j]) {
+            swapNumber(arr, j, j - 1);
+            swapBars(j, j - 1); // Update bars based on the new indices
             j--;
-           await sleep(500);
-           
+            await sleep(500);
         }
     }
 }
@@ -111,14 +125,11 @@ async function mergeSort(arr, low, high) {
     if (low >= high) return;
 
     let mid = Math.floor((low + high) / 2);
-    
-    // Recursively sort the first half
+
     await mergeSort(arr, low, mid);
-    
-    // Recursively sort the second half
+
     await mergeSort(arr, mid + 1, high);
-    
-    // Merge the sorted halves
+
     await merge(arr, low, mid, high);
 }
 
@@ -142,7 +153,6 @@ async function merge(arr, low, mid, high) {
         swapMergeBars(arr, low, temp); // Update the bars visually
     }
 
-    // Copy the remaining elements
     while (left <= mid) {
         temp.push(arr[left]);
         left++;
@@ -163,34 +173,28 @@ async function merge(arr, low, mid, high) {
 }
 
 
-
 function swapNumber(arr, index1, index2) {
     let temp = arr[index1];
     arr[index1] = arr[index2];
     arr[index2] = temp;
 }
 
-function swapBars(index1,index2){
-
-
+function swapBars(index1, index2) {
     let bar1 = document.getElementById("eleBar" + index1);
     let bar2 = document.getElementById("eleBar" + index2);
 
-    let height1=bar1.clientHeight;
-    let height2=bar2.clientHeight;
-    bar1.style.height=height2+"px";
-    bar2.style.height=height1+"px";
+    let height1 = bar1.clientHeight;
+    let height2 = bar2.clientHeight;
+    bar1.style.height = height2 + "px";
+    bar2.style.height = height1 + "px";
 
-    let text1=bar1.innerHTML;
-    let text2=bar2.innerHTML
-    bar1.innerHTML=text2;
-    bar2.innerHTML=text1;
+    let text1 = bar1.innerHTML;
+    let text2 = bar2.innerHTML;
+    bar1.innerHTML = text2;
+    bar2.innerHTML = text1;
 }
-//swapping of bars for merge sort
-function swapMergeBars(arr, low, temp) {
-    // 'arr' is the full array, 'low' is the starting index of the segment being merged,
-    // 'temp' is the temporary array containing the merged result
 
+function swapMergeBars(arr, low, temp) {
     for (let i = 0; i < temp.length; i++) {
         let bar = document.getElementById("eleBar" + (low + i));
         bar.style.height = temp[i] * 6 + "px"; // Adjust the height based on the element's value

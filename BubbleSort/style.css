@@ -35,6 +35,7 @@
     width: 58px;
     height: 30px;
     padding-top: 12px;
+    cursor: pointer;
 
 }
 #algorithm-select{
